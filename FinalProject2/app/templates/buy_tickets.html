@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Buy Tickets{% endblock %}
+
+{% block content %}
+<h2>Buy Tickets</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>Ticket Type:
+        <select name="ticket_type">
+            {% for ticket in tickets %}
+                <option value="{{ ticket.type }}">{{ ticket.type }} - ${{ ticket.price }}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>{{ form.quantity.label }} {{ form.quantity() }}</p>
+    <p><button type="submit">Buy</button></p>
+</form>
+{% endblock %}

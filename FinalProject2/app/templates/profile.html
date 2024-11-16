@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Profile</h2>
+<p>Username: {{ user.username }}</p>
+<p>Balance: ${{ user.balance }}</p>
+
+<h3>Purchase History</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Ticket Type</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchase in purchases %}
+            <tr>
+                <td>{{ purchase.ticket.type }}</td>
+                <td>{{ purchase.quantity }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">No tickets purchased.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

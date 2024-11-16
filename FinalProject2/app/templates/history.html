@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+<h2>History</h2>
+
+<h3>Statistics</h3>
+<p>Total Spent: ${{ total_spent }}</p>
+<p>Total Won: ${{ total_won }}</p>
+<p>Losses: {{ losses }}</p>
+<p>Break-Evens: {{ break_even }}</p>
+<p>Wins: {{ wins }}</p>
+
+<h3>Detailed History</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Ticket Type</th>
+            <th>Win Amount</th>
+            <th>Previous Balance</th>
+            <th>Current Balance</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in history_records %}
+        <tr>
+            <td>{{ record.ticket_type }}</td>
+            <td>${{ record.win_amount }}</td>
+            <td>${{ record.previous_balance }}</td>
+            <td>${{ record.current_balance }}</td>
+            <td>{{ record.result_type }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">No history available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
