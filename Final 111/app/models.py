@@ -1,5 +1,3 @@
-# models.py
-
 from . import db
 import hashlib
 import uuid
