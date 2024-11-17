@@ -100,15 +100,16 @@ def buy_tickets():
     form = TicketPurchaseForm()
     user_id = session.get('user_id')
 
+    # Проверяем, что пользователь вошел в систему
     if not user_id:
         flash('Please log in to buy tickets.', 'warning')
         return redirect(url_for('views.login'))
 
     user = User.query.get(user_id)
-    print("User ID:", user_id, "User Balance:", user.balance)  # Debugging user info
 
+    # Если форма отправлена
     if form.validate_on_submit():
-        ticket_type = request.form['ticket_type']
+        ticket_type = request.form['ticket_type']  # Получаем тип билета из скрытого поля
         ticket = Ticket.query.filter_by(type=ticket_type).first()
 
         if not ticket:
@@ -118,24 +119,25 @@ def buy_tickets():
         quantity = form.quantity.data
         total_cost = ticket.price * quantity
 
-        print(f"Selected Ticket: {ticket_type}, Quantity: {quantity}, Total Cost: {total_cost}")
-
         if user.balance >= total_cost:
-            # Deduct the cost from the user's balance
+            # Вычитаем стоимость билетов из баланса пользователя
             user.balance -= total_cost
-            # Create a new Purchase record
+
+            # Создаем запись о покупке
             purchase = Purchase(user_id=user_id, ticket_id=ticket.id, quantity=quantity)
             db.session.add(purchase)
             db.session.commit()
-            print(f"Purchased {quantity} {ticket_type} ticket(s) for user {user_id}")  # Debugging purchase
-            flash('Tickets successfully purchased!', 'success')
+
+            flash(f'Successfully purchased {quantity} {ticket_type} ticket(s)!', 'success')
         else:
             flash('Insufficient funds.', 'danger')
 
         return redirect(url_for('views.profile'))
 
+    # Передаем список билетов для отображения в шаблоне
     tickets = Ticket.query.all()
     return render_template('buy_tickets.html', form=form, tickets=tickets, user=user)
+
 
 
 @views.route('/balance', methods=['GET', 'POST'])

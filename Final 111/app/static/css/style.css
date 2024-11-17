@@ -187,3 +187,35 @@ form input:focus, form select:focus {
         gap: 10px;
     }
 }
+#ticket-selection {
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;    /* Центрирование по вертикали */
+    flex-wrap: wrap;        /* Чтобы изображения переносились на следующую строку */
+    gap: 20px;              /* Расстояние между изображениями */
+    margin-top: 50px;       /* Отступ сверху */
+}
+
+.ticket-option {
+    text-align: center;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.ticket-image {
+    width: 200px; /* Увеличение размера изображения */
+    height: 200px; /* Увеличение размера изображения */
+    border-radius: 10px; /* Слегка закруглённые края */
+    transition: transform 0.3s ease;
+}
+
+.ticket-option:hover .ticket-image {
+    transform: scale(1.1); /* Увеличение при наведении */
+}
+
+#selected-ticket {
+    margin-top: 20px;
+    text-align: center; /* Центрирование текста */
+}
+

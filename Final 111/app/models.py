@@ -30,6 +30,7 @@ class Ticket(db.Model):
     min_win = db.Column(db.Float, nullable=False)
     max_win = db.Column(db.Float, nullable=False)
 
+
 class Purchase(db.Model):
     __tablename__ = 'purchase'
     id = db.Column(db.Integer, primary_key=True)

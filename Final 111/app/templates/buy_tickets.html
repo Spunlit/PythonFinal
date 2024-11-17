@@ -4,16 +4,22 @@
 
 {% block content %}
 <h2>Buy Tickets</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <p>Ticket Type:
-        <select name="ticket_type">
-            {% for ticket in tickets %}
-                <option value="{{ ticket.type }}">{{ ticket.type }} - ${{ ticket.price }}</option>
-            {% endfor %}
-        </select>
-    </p>
-    <p>{{ form.quantity.label }} {{ form.quantity() }}</p>
-    <p><button type="submit">Buy</button></p>
-</form>
+<div id="ticket-selection">
+    {% for ticket in tickets %}
+    <div class="ticket-option" onclick="selectTicket('{{ ticket.type }}', {{ ticket.price }})">
+        <img src="{{ url_for('static', filename='images/' + ticket.type.lower() + '.png') }}" alt="{{ ticket.type }}" class="ticket-image">
+        <p>{{ ticket.type }} - ${{ ticket.price }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="selected-ticket" style="display: none;">
+    <h3 id="selected-ticket-name"></h3>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>{{ form.quantity.label }} {{ form.quantity() }}</p>
+        <input type="hidden" id="selected-ticket-type" name="ticket_type">
+        <button type="submit">Buy</button>
+    </form>
+</div>
 {% endblock %}

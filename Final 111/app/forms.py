@@ -16,3 +16,4 @@ class LoginForm(FlaskForm):
 class TicketPurchaseForm(FlaskForm):
     quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1, max=10)])
     submit = SubmitField('Buy')
+
