@@ -297,3 +297,14 @@ def leaderboard():
 
     return render_template('leaderboard.html', leaderboard_data=leaderboard_data)
 
+@views.errorhandler(404)
+def not_found_error(error):
+    flash('Page not found', 'danger')
+    return render_template('error.html', error_message='Page not found'), 404
+
+
+@views.errorhandler(500)
+def internal_error(error):
+    flash('Internal server error. Please try again later.', 'danger')
+    return render_template('error.html', error_message='Internal server error'), 500
+
