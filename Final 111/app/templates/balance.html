@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Balance{% endblock %}
+
+{% block content %}
+<h2>Add Balance</h2>
+<form method="POST">
+    <label for="amount">Amount to Add:</label>
+    <input type="number" name="amount" min="1" required>
+    <button type="submit">Add</button>
+</form>
+<p>Current Balance: ${{ user.balance }}</p>
+{% endblock %}

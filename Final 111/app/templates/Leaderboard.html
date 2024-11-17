@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Leaderboard</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Total Win</th>
+            <th>Total Loss</th>
+            <th>Ticket Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in leaderboard_data %}
+        <tr>
+            <td>{{ row.username }}</td>
+            <td>{{ row.total_win }}</td>
+            <td>{{ row.total_loss }}</td>
+            <td>{{ row.ticket_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
