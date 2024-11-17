@@ -35,10 +35,18 @@ def upload():
 
 @views.route('/download_file/<filename>', methods=['GET'])
 def download_file(filename):
+    print(f"Attempting to find file: {filename}")
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
+    print(f"Full path to file: {filepath}")
+    if not os.path.exists(filepath):
+        print("File does not exist")
+        return {'message': f'File {filename} not found'}, 404
     try:
         return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
-    except FileNotFoundError:
-        return {'message': f'File {filename} not found'}, 404
+    except Exception as e:
+        print(f"Error during file sending: {e}")
+        return {'message': 'Unexpected error occurred'}, 500
+
 
 
 @views.route('/files', methods=['GET'])
