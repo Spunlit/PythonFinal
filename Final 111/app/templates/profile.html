@@ -28,4 +28,17 @@
         {% endfor %}
     </tbody>
 </table>
+<h3>Avatar</h3>
+{% if user.avatar %}
+    <img src="{{ url_for('static', filename=user.avatar) }}" alt="Avatar" width="100">
+    <a href="{{ url_for('views.download_file', filename=user.avatar.split('/')[-1]) }}">Download Avatar</a>
+{% else %}
+    <p>No avatar uploaded.</p>
+{% endif %}
+<form method="POST" action="{{ url_for('views.upload_avatar') }}" enctype="multipart/form-data">
+    <label for="avatar">Upload Avatar:</label>
+    <input type="file" name="avatar" id="avatar" accept="image/*">
+    <button type="submit">Upload</button>
+</form>
+
 {% endblock %}

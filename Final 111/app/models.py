@@ -8,7 +8,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(64), nullable=False)
     token = db.Column(db.String(64), unique=True, nullable=False)
-    balance = db.Column(db.Float, default=0)
+    balance = db.Column(db.Float, default=1)
+    avatar = db.Column(db.String(120), nullable=True)  # Новая колонка для аватарки
 
     def set_password(self, password):
         self.password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()

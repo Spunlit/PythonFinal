@@ -40,6 +40,7 @@ def download_file(filename):
     except FileNotFoundError:
         return {'message': f'File {filename} not found'}, 404
 
+
 @views.route('/files', methods=['GET'])
 def list_files():
     files = os.listdir(UPLOAD_FOLDER)  # Получаем список файлов
@@ -287,15 +288,18 @@ def logout():
 
 @views.route('/leaderboard')
 def leaderboard():
-    # Получаем данные из базы
+    # Получаем данные из базы, включая путь к аватарке
     leaderboard_data = db.session.query(
         User.username,
+        User.avatar,  # Добавляем путь к аватарке
         db.func.sum(HistoryUser.win_amount).label('total_win'),
         db.func.sum(HistoryUser.ticket_cost).label('total_loss'),
         db.func.count(HistoryUser.ticket_type).label('ticket_count')
-    ).join(HistoryUser, User.id == HistoryUser.user_id).group_by(User.username).all()
+    ).join(HistoryUser, User.id == HistoryUser.user_id).group_by(User.username, User.avatar).all()
 
     return render_template('leaderboard.html', leaderboard_data=leaderboard_data)
+
+
 
 @views.errorhandler(404)
 def not_found_error(error):
@@ -308,3 +312,37 @@ def internal_error(error):
     flash('Internal server error. Please try again later.', 'danger')
     return render_template('error.html', error_message='Internal server error'), 500
 
+@views.route('/profile/upload_avatar', methods=['POST'])
+def upload_avatar():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Please log in to upload an avatar.', 'warning')
+        return redirect(url_for('views.login'))
+
+    user = User.query.get(user_id)
+    file = request.files.get('avatar')
+    if file and file.filename != '':
+        filepath = os.path.join('static/uploads', f"{user_id}_avatar.png")
+        file.save(filepath)
+        user.avatar = f"static/uploads/{user_id}_avatar.png"  # Сохраняем относительный путь
+        db.session.commit()
+        flash('Avatar uploaded successfully!', 'success')
+    else:
+        flash('No file selected.', 'danger')
+
+    return redirect(url_for('views.profile'))
+
+@views.route('/profile/download_avatar')
+def download_avatar():
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('Please log in to download an avatar.', 'warning')
+        return redirect(url_for('views.login'))
+
+    user = User.query.get(user_id)
+    if user.avatar:  # Проверяем, указана ли аватарка
+        filepath = os.path.join('static', user.avatar)  # Указываем путь относительно папки static
+        return send_from_directory(directory='static', path=user.avatar, as_attachment=True)
+    else:
+        flash('No avatar found.', 'danger')
+        return redirect(url_for('views.profile'))
